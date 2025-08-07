@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Secret Message Encoder ✉️</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #f9f9f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+  <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 400px; text-align: center;">
+    
+    <h2 style="margin-bottom: 10px;">🔐 Secret Message Encoder</h2>
+    <p style="font-size: 0.9rem; color: #666;">Caesar Cipher with letter shift</p>
+    
+    <textarea id="inputText" placeholder="Type your secret message here..." rows="4" style="width: 100%; padding: 10px; margin-top: 15px; border-radius: 6px; border: 1px solid #ccc; resize: none;"></textarea>
+    
+    <label for="shift" style="display: block; margin-top: 15px; font-size: 0.9rem;">🔁 Shift: <span id="shiftValue">3</span></label>
+    <input type="range" id="shift" min="1" max="25" value="3" style="width: 100%; margin-bottom: 15px;" oninput="document.getElementById('shiftValue').textContent = this.value">
+    
+    <button onclick="encode()" style="background: #4CAF50; color: white; padding: 10px 20px; margin-right: 10px; border: none; border-radius: 6px; cursor: pointer;">Encode</button>
+    <button onclick="decode()" style="background: #2196F3; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Decode</button>
+    
+    <h3 style="margin-top: 20px;">🔓 Result:</h3>
+    <div id="result" style="min-height: 50px; background: #f0f0f0; padding: 10px; border-radius: 6px; border: 1px dashed #aaa; word-wrap: break-word;"></div>
+  </div>
+
+  <script>
+    function caesarCipher(str, shift, action) {
+      let result = '';
+      for (let i = 0; i < str.length; i++) {
+        let char = str[i];
+        if (char.match(/[a-z]/i)) {
+          let code = str.charCodeAt(i);
+          let base = code >= 65 && code <= 90 ? 65 : 97;
+          if (action === 'encode') {
+            code = ((code - base + shift) % 26) + base;
+          } else {
+            code = ((code - base - shift + 26) % 26) + base;
+          }
+          result += String.fromCharCode(code);
+        } else {
+          result += char; // Keep non-letter characters
+        }
+      }
+      return result;
+    }
+
+    function encode() {
+      const text = document.getElementById('inputText').value;
+      const shift = parseInt(document.getElementById('shift').value);
+      const encoded = caesarCipher(text, shift, 'encode');
+      document.getElementById('result').textContent = encoded;
+    }
+
+    function decode() {
+      const text = document.getElementById('inputText').value;
+      const shift = parseInt(document.getElementById('shift').value);
+      const decoded = caesarCipher(text, shift, 'decode');
+      document.getElementById('result').textContent = decoded;
+    }
+  </script>
+</body>
+</html>
